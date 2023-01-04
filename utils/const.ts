@@ -1,4 +1,6 @@
 const AUTHOR = 'Taito HAGA';
 const YEAR = '2022';
 
-export { AUTHOR, YEAR };
+const API_URL = 'http://localhost:8080';
+
+export { AUTHOR, YEAR, API_URL };

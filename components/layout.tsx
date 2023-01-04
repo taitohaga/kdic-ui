@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { LandingNavbar } from './navbar';
+import { LandingNavbar, Navbar } from './navbar';
 import Footer from './footer';
 
 export function Container({
@@ -55,6 +55,20 @@ export function LandingLayout({
   );
 }
 
-export function MainLayout({ children }: { children?: React.ReactNode }) {
-  return <></>;
+export function MainLayout({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <>
+      <Navbar />
+      <Main className={`bg-slate-100 py-4 ${className ? className : ''}`}>
+        {children}
+      </Main>
+      <Footer />
+    </>
+  );
 }
