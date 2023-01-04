@@ -19,7 +19,10 @@ export interface Datedelta {
 }
 
 export function formatDatedelta(since: Date, until: Date): Datedelta {
-  let delta = (until.getTime() - since.getTime()) / 1000;
+  console.log(since);
+  console.log(until);
+  let delta =
+    (until.getTime() - since.getTime()) / 1000 - until.getTimezoneOffset() * 60;
   let unit: Timeunit = 'sec';
   if (delta < minTime) {
     unit = 'sec';

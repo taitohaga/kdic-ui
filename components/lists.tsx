@@ -36,6 +36,7 @@ interface WordItemProps {
   translation?: string;
   example?: string;
   updatedAt: Date;
+  dictionaryName?: string;
 }
 
 export function WordList({ children }: React.PropsWithChildren) {
@@ -47,6 +48,7 @@ export function WordItem({
   translation,
   example,
   updatedAt,
+  dictionaryName,
 }: WordItemProps) {
   const { delta, unit } = formatDatedelta(updatedAt, new Date());
   return (
@@ -54,9 +56,14 @@ export function WordItem({
       <div className="text-lg font-bold mr-2 grow">{headword}</div>
       <div className="whitespace-pre-wrap">{translation}</div>
       <div className="whitespace-pre-wrap">{example}</div>
-      <span className="text-sm font-slate-500">
+      <p className="text-sm font-slate-500">
         最終更新: {delta} {jaTimeunit(unit)}前
-      </span>
+      </p>
+      {dictionaryName ? (
+        <span className="text-sm font-mono bg-slate-100 rounded-ms">
+          {dictionaryName}
+        </span>
+      ) : null}
     </li>
   );
 }

@@ -16,14 +16,31 @@ export interface Dictionary {
   description: string;
   image_url?: string;
   scansion_url?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   word_count: number;
+}
+
+export interface WordSnapshot {
+  wordsnapshot_id: number;
+  word_id: number;
+  word: string;
+  translation: string;
+  example: string;
+  editor_id: number;
+  updated_at: string;
+  dictionary_id: number;
+  dictionary_name: string;
 }
 
 export default function Dashboard() {
   const router = useRouter();
   const { data, isLoading, error } = useSWR('/dic/my');
+  const {
+    data: recentWords,
+    isLoading: isLoadingRecentWords,
+    error: errorRecentWords,
+  } = useSWR('/dic/recent-words?limit=3');
   useEffect(() => {
     const token =
       typeof localStorage !== 'undefined'
@@ -57,22 +74,21 @@ export default function Dashboard() {
           <div>
             <h1 className="text-md">最近編集した単語</h1>
             <WordList>
-              <WordItem
-                headword="fistir"
-                translation={`【動詞】ぴすてぃるする\n【独立詞】(あいさつ) ぴすてぃる`}
-                example={`Am wana fistir di kas. -- 私は彼女にぴすてぃるしたいです。`}
-                updatedAt={new Date(2022, 11, 31, 19, 0, 0)}
-              />
-              <WordItem
-                headword="am"
-                translation={`【代名詞】わたし\n格変化: am / amn / arm`}
-                updatedAt={new Date(2022, 11, 30, 22, 30, 0)}
-              />
-              <WordItem
-                headword="kas"
-                translation="【代名詞】彼女"
-                updatedAt={new Date(2022, 10, 23, 22, 30, 0)}
-              />
+              {isLoadingRecentWords ? (
+                <>読み込み中</>
+              ) : errorRecentWords ? (
+                <>エラー!</>
+              ) : recentWords ? (
+                (recentWords['words'] as WordSnapshot[]).map(word => (
+                  <WordItem
+                    headword={word.word}
+                    translation={`${word.translation}`}
+                    example={`${word.example}`}
+                    updatedAt={new Date(word.updated_at)}
+                    dictionaryName={word.dictionary_name}
+                  />
+                ))
+              ) : null}
             </WordList>
           </div>
           <div className="col-span-2">
